@@ -1,0 +1,67 @@
+//============================================================================
+// Name        : Composite.cpp
+// Author      : Mantesh
+// Version     :
+// Copyright   : Your copyright notice
+// Description : 
+//============================================================================
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <functional>
+
+using namespace std;
+
+class IDevices {
+public:
+	virtual void display() = 0;
+	virtual void add(IDevices *device){};
+	virtual void getDevice(int){};
+	virtual ~IDevices(){};
+};
+
+class DeviceA : public IDevices {
+public:
+	void display() {
+		cout << "called DeviceA class... "<< endl;
+	}
+};
+
+class DeviceB : public IDevices {
+public:
+	void display() {
+		cout << "called DeviceB class... "<< endl;
+	}
+};
+
+// // Composite
+class DeviceComposite : public IDevices {
+public:
+	void display() {
+		// for each element in dList, call the draw member function
+		for_each(dList.begin(), dList.end(), mem_fun(&IDevices::display));
+	}
+
+	void add(IDevices *device) {
+		dList.push_back(device);
+	}
+private:
+	vector<IDevices *> dList;
+};
+
+int main() {
+	cout << "Composite example" << endl; // prints Composite example
+	DeviceA devA;
+	devA.display();
+	DeviceB devB;
+	devB.display();
+
+	cout << "\nwith Composite" << endl;
+	DeviceComposite devComposite;
+	devComposite.add(&devA);
+	devComposite.add(&devB);
+	devComposite.display();
+
+	return 0;
+}
